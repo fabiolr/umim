@@ -16,15 +16,25 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
           	<li {{ Request::path() == 'dash' ? ' class=active' : '' }}><a href="/dash">Dash</a></li>
-            <li {{ Request::path() == 'about' ? ' class=active' : '' }}><a href="/about">About</a></li>
             <li {{ Request::path() == 'meds' ? ' class=active' : '' }}><a href="/meds">Meds</a></li>
             <li {{ Request::path() == 'mymeds' ? ' class=active' : '' }}><a href="/mymeds">My Meds</a></li>
-            <li {{ Request::path() == 'symps' ? ' class=active' : '' }}><a href="/symps">Treatments</a></li>
+            <li {{ Request::path() == 'uses' ? ' class=active' : '' }}><a href="/uses">Uses</a></li>
             <li {{ Request::path() == 'friends' ? ' class=active' : '' }}><a href="/friends">Friends</a></li>
-            <li {{ Request::path() == 'search' ? ' class=active' : '' }}><a href="/search">Search</a></li>
-            <li {{ Request::path() == 'logout' ? ' class=active' : '' }}><a href="/logout">Logout</a></li>
+<!--             <li {{ Request::path() == 'search' ? ' class=active' : '' }}><a href="#">Search</a></li>
+ -->         
+
+
           </ul>
-          <p class="navbar-text navbar-right"><a href="#" class="navbar-link">{{ Auth::user()->name }}</a></p>
+
+          <form action="/search" class="navbar-form navbar-left" role="search">
+              <div class="input-group input-group-sm">
+                <input name="q" type="text" class="form-control input-group-sm" placeholder="Search...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">Go!</button>
+                </span>
+              </div>
+          </form>
+          <div class="navbar-text navbar-right"><a href="#" class="navbar-link">{{ Auth::user()->name }}</a>  |  <a class="navbar-link" href="/logout"><span class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true"></span></a></di>
 
         </div><!--/.nav-collapse -->
 

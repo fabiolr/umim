@@ -1,0 +1,804 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"a",
+				"area"
+			],
+			[
+				"cent",
+				"centerPoint"
+			],
+			[
+				"fi",
+				"firstSquare"
+			],
+			[
+				"si",
+				"siblings"
+			],
+			[
+				"rs",
+				"rs"
+			],
+			[
+				"px",
+				"px"
+			],
+			[
+				"ra",
+				"randrange"
+			],
+			[
+				"add",
+				"AddCircle"
+			],
+			[
+				"r",
+				"random"
+			],
+			[
+				"reu",
+				"requestsMade"
+			],
+			[
+				"func",
+				"create_function"
+			],
+			[
+				"hit",
+				"hitCount"
+			],
+			[
+				"new",
+				"newGame"
+			],
+			[
+				"shoo",
+				"shooterCount"
+			],
+			[
+				"hi",
+				"hitCount"
+			],
+			[
+				"ac",
+				"active_ingrediant"
+			],
+			[
+				"med",
+				"med_types"
+			],
+			[
+				"des",
+				"description"
+			],
+			[
+				"active",
+				"active_ingredient"
+			],
+			[
+				"for",
+				"foreach\tforeach …"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"wind",
+				"windowHeight"
+			],
+			[
+				"windo",
+				"windowWidth"
+			],
+			[
+				"time",
+				"timeout\tsetTimeout function"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"Do",
+				"DoZipStuff"
+			],
+			[
+				"Error",
+				"ErrorMsg"
+			],
+			[
+				"tex",
+				"textColorHex"
+			],
+			[
+				"te",
+				"text"
+			],
+			[
+				"cu",
+				"currentWeather"
+			],
+			[
+				"weat",
+				"weatherID"
+			],
+			[
+				"his",
+				"historicalLowAvg"
+			],
+			[
+				"historicallo",
+				"historicalLowMin"
+			],
+			[
+				"historicalH",
+				"historicalHighMax"
+			],
+			[
+				"cur",
+				"currentCase"
+			],
+			[
+				"ge",
+				"getHours"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"p",
+				"p5"
+			],
+			[
+				"g",
+				"gauge"
+			],
+			[
+				"tod",
+				"today"
+			],
+			[
+				"sp",
+				"speedSlider"
+			],
+			[
+				"cre",
+				"createSlider"
+			],
+			[
+				"va",
+				"value"
+			],
+			[
+				"spe",
+				"speedShoot"
+			],
+			[
+				"v",
+				"vertical-align"
+			],
+			[
+				"max-",
+				"max-height"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"bo",
+				"bower_components"
+			],
+			[
+				"norm",
+				"normalTemp"
+			],
+			[
+				"noral",
+				"normalTemp"
+			],
+			[
+				"Pur",
+				"PurseY"
+			],
+			[
+				"Poss",
+				"PossibleY"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"font",
+				"font-variant"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "import rhinoscriptsyntax as rs\n\n\nclass ArtObject:\n\n\tcount = 0\n\n\tdef __init__(self, id):\n\t\tself.id = id\n\t\tself.count += 1\n\n\tdef getId(self):\n\n\t\treturn self.id\n\n\tdef area(self):\n\n\t\tself.area = rs.Area(self.id)\n\t\treturn self.area\n\n\tdef rotate(self, center, angle):\n\t\tnew_id = rs.RotateObject(self.id, center, angle, None, True)\n\t\treturn new_id\n\n\tdef move(self, translation):\n\t\tnew_id = rs.MoveObject(self.id, translation)\n\t\treturn new_id\n\n\tdef breed(self, translation):\n\n\t\tnew_id = rs.CopyObject (self.id, translation)\n\t\tself.siblings.append(new_id)\n\t\treturn new_id\n\nclass Circle(ArtObject):\n\n\tdef __init__(self, plane, radius):\n\t\t\n\t\tself.radius = radius\n\t\tself.plane = plane\n\n\tdef draw(self):\n\t\t\n\t\tself.id = rs.AddCircle(self.plane, self.radius)\n\nclass Triangle(ArtObject):\n\n\tdef __init__(self):\n\t\tpass\n\n\tdef draw(self, points):\n\t\tpoints.append(points[0])\n\t\tself.id = rs.AddPolyline(points)\n\t\treturn self.id\n\n\tdef divide(self, scale,n,i):\n\t    pts = rs.DivideCurve(self.id, n)\n\t    origin = pts[i]\n\t    scales = scale, scale, 1\n\t    return rs.ScaleObject(self.id, origin, scales, True)\n\nclass Square(ArtObject):\n\n\tsiblings = []\n\n\tdef __init__(self):\n\t\tpass\t\n\n\tdef draw(self, startPoint, side):\n\t\t\n\t\tp1 = (startPoint[0] + side, startPoint[1], 0)\n\t\tp2 = (startPoint[0] + side, startPoint[1] + side, 0)\n\t\tp3 = (startPoint[0], startPoint[1] + side, 0)\n\t\tpoints = (startPoint, p1,p2,p3, startPoint)\n\t\tself.id = rs.AddPolyline(points)\n\t\treturn self.id\n\nclass Elipse(ArtObject):\n\n\n\tdef __init__(self, plane, XRadius, YRadius):\n\t\t\n\t\tself.XRadius = XRadius\n\t\tself.YRadius = YRadius\n\t\tself.plane = plane\n\n\tdef draw(self):\n\t\t\n\t\tself.id = rs.AddEllipse(self.plane, self.XRadius, self.YRadius)\n\nclass Line(ArtObject):\n\n\tdef __init__(self,points):\n\n\t\tself.points = points\n\n\tdef draw(self):\n\n\t\treturn rs.AddLine(self.points[0],self.points[1])\n\n\tdef kochify(self.id, center, angle, factor):\n\n\t    points = rs.DivideCurve(self.id, 3)\n\t    poly = f.Line()\n\t    poly1 = rs.AddLine (pts [0], pts [1])\n\t     \n\t    #Rotate the Polyline\n\t    poly2 = rs.RotateObject(poly1, pts[center], angle, None, False)\n\t     \n\t    #Move the Polyline\n\t    vecFactor = rs.VectorSubtract(pts[1], pts[0])\n\t    x = vecFactor[0]*factor\n\t    y = vecFactor[1]*factor\n\t    translation = x, y, 0\n\t    id = rs.MoveObject(poly2, translation)\n\t    return id\n",
+			"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/modules/f.py",
+			"file_size": 1828,
+			"file_write_time": 131188499070000000,
+			"settings":
+			{
+				"buffer_size": 2307,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "# @fabiolr mathArt exercise \n# triangle sierpinsky using f library \n\n\nimport rhinoscriptsyntax as rs\nimport modules.f as f\nimport math as m #needed to get pi\nreload(f)\n\n\n#Define the First Line:\n\np1 = 0,0,0\np2 = 5,5,0\n\npoints = (p1,p2)\nline = f.Line(points)\nline.draw()\n\n\n \n\n \n# def recursiveLine(FisrtLine):\n#     length = rs.CurveLength(FisrtLine)\n#     if length < 1:\n#         return\n#     else: \n#         id1 = transform(FisrtLine, 0, 0, 0)\n#         recursiveLine(id1)\n         \n#         id2 = transform(FisrtLine, 0, 60, 1)\n#         recursiveLine(id2)\n         \n#         id3 = transform(FisrtLine, 1, -60, 1)\n#         recursiveLine(id3)\n         \n#         id4 = transform(FisrtLine, 0, 0, 2)\n#         recursiveLine(id4)\n#         rs.DeleteObject(FisrtLine)\n \n# FisrtLine = fisrtLine()\n# recursiveLine(FisrtLine)",
+			"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160920_1_Koch_SnowFlake.py",
+			"file_size": 1321,
+			"file_write_time": 131188498740000000,
+			"settings":
+			{
+				"buffer_size": 824,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "import rhinoscriptsyntax as rs\nimport random as rd\n\n#DDefine the First Line:\ndef fisrtLine():\n    pt1X = rd.random() *60   \n    pt1Y = rd.random() *60\n     \n    pt2X = rd.random() *60\n    pt2Y = rd.random() *60\n     \n    pt1 = rs.AddPoint(pt1X, pt1Y, 0)\n    pt2 = rs.AddPoint(pt2X, pt2Y, 0)\n     \n    FisrtLine = rs.AddLine(pt1, pt2) \n    return FisrtLine\n \ndef transform(FisrtLine, center, angle, factor):\n    #Divide the Fisrt Line\n    pts = rs.DivideCurve(FisrtLine, 3)\n    poly1 = rs.AddLine (pts [0], pts [1])\n     \n    #Rotate the Polyline\n    poly2 = rs.RotateObject(poly1, pts[center], angle, None, False)\n     \n    #Move the Polyline\n    vecFactor = rs.VectorSubtract(pts[1], pts[0])\n    x = vecFactor[0]*factor\n    y = vecFactor[1]*factor\n    translation = x, y, 0\n    id = rs.MoveObject(poly2, translation)\n    return id\n \ndef recursiveLine(FisrtLine):\n    length = rs.CurveLength(FisrtLine)\n    if length < 1:\n        return\n    else: \n        id1 = transform(FisrtLine, 0, 0, 0)\n        recursiveLine(id1)\n         \n        id2 = transform(FisrtLine, 0, 60, 1)\n        recursiveLine(id2)\n         \n        id3 = transform(FisrtLine, 1, -60, 1)\n        recursiveLine(id3)\n         \n        id4 = transform(FisrtLine, 0, 0, 2)\n        recursiveLine(id4)\n        rs.DeleteObject(FisrtLine)\n \nFisrtLine = fisrtLine()\nrecursiveLine(FisrtLine)",
+			"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Maha Halawani/week 4/MahaHalawani_20160919_1_KochCurve.py",
+			"file_size": 1402,
+			"file_write_time": 131188123890000000,
+			"settings":
+			{
+				"buffer_size": 1350,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 67.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Snippet: ",
+				"Snippet: html"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes"
+	],
+	"file_history":
+	[
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/test.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160919_1_Triangle_Sierpinski.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Haochi Zhang/Haochi_20160917_SierpinskiTriangle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160915_1_ trip_It_5shapes.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/teste2.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160916_7_ClassAssignement1.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160916_6_ClassAssignement1.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160916_4_ConvertCode.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/modules/__init__.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/FabioLib.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Zhengrong Hu/Week4/ZHu_20160917_Version2_SIerpinskiTree.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/YiTingChen/YiTing_20160917_DailyCoding23(SierpinskiTriangle).py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Victor Kalil/victorkalil_20160911_fiveshapesseingle.py",
+		"/Users/fabio/Dropbox (SPH)/TempDocs/test.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/teste2",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Todd Heino/todd_20160915_1_singleIteration_singleShape.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Todd Heino/todd_20160909_1_outsideOfCircle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Zhengrong Hu/ZHu_20160912_Version2_DoubleIteration1Shapes.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomShapes.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160826_1_ClassExercise2.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160903_1_lines_in_cross.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160906_1_lines_in_out_box.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160905_1_circles_out_box.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160906_2_lines_in_out_box.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160907_1_curves_out_circle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160908_1_curves_out_in_circle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160906_3_lines_in_out_box.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160907_1_some_other_curves.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160907_2_curves_out_circle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160905_1_circles_out_cross.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160902_1_circles_in_rect.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160902_1_RandomSinCos.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160904_1_curves_circle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160903_1_curves_circle.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160902_1_CombineCondition.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160902_1_ClassAssignement4.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160902_1_ClassAssignement.py",
+		"/Users/fabio/Dropbox (SPH)/UM/Fabrication/test.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/plane_test.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomRectangles.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomCircles.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio_20160826_1_ClassExercise.py",
+		"/Users/fabio/test.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_2_HomeWorkRandomLines.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomCurves.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomPoints(v2).py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160827_1_HomeWorkRandomLines(v2).py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio_20160827_1_HomeWorkRandomPoints.py",
+		"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/test.py",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/node/bot_fb/bot_wit.js",
+		"/Users/fabio/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/routes.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/friends/hismeds.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/delme.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Friendship.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/User.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/friends/add.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/pages/dash.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/composer.json",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/emails/request.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/storage/framework/views/2a57922a83fd1d58d159f3f9785b58d24a6229f2.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/friends/home.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/common/nav.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/FriendsController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/pages/results.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/DashController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/SearchController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/meds.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/database/migrations/2016_04_30_205250_create_friendships_table.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/MedsController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/MyMedsController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/pages/friends.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Med.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/database/migrations/2016_04_30_151320_create_friends_table.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Friend.php",
+		"/Users/fabio/Dropbox (SPH)/Tecnico/Configs/EMBU/Config2801_ComAsteriskAWS.txt",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/srv-SocketChat/morumbi",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/srv-SocketChat/index.js",
+		"/Users/fabio/Documents/Arduino/PumpSystem_Receiver/ReadMe.md",
+		"/Users/fabio/Documents/Arduino/libraries/Adafruit_MQTT/Adafruit_MQTT.cpp",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/index.html",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/index.js",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot_slack/chat.js",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/JsonController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/node/bot_fb/bot_ai.js",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/node/bot_fb/bot_wit_2.js",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/bot/home.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/BotController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot/chat.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/battleshipServerSide/index.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/socket.io-client-swift-example/server/index.js",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot/database.js",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot/bot.js",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot/norrisbot/token.js.sample",
+		"/Users/fabio/Dropbox (SPH)/UM/UX/bot/slack.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/package.json",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/socket.io-client-swift-example/server/package.json",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/test.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/app.json",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/fbs/app.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/battleshipServerSide/index.html",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/battleshipServerSide/package.json",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/battleshipServerSide/app.js",
+		"/Users/fabio/Dropbox (SPH)/UM/BTE524/battleshipServerSide/Procfile",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/readme.md",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/config/database.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/uses.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/mymeds.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/use_form.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/show.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/MedUse.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/MedUser.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/edit_mymed.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/public/js/jquery.mask.js",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/type_modal.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/meds/med_form.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/database/migrations/2016_03_14_142601_create_uses_table.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Use.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/database/migrations/2016_03_14_144354_create_uses_table.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Type.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/database/migrations/2016_03_14_150149_create_med_uses_table.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/common/foot.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/common/head.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/app/Http/Controllers/Auth/AuthController.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/common/main_not_logged.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/common/nav_not_logged.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/auth/login.blade.php",
+		"/Users/fabio/Dropbox (SPH)/UM/meds/resources/views/auth/register.blade.php"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+			"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/",
+			"/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio",
+			"/Users/fabio/Dropbox (SPH)/UM/meds",
+			"/Users/fabio/pcomp",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"3",
+			"sibl",
+			"pass",
+			"radius",
+			"rs.",
+			"rotate",
+			"Branch",
+			" =",
+			"rs",
+			"side",
+			"plane",
+			"append",
+			"rotate",
+			"trianglerotate",
+			"triangle",
+			"object",
+			"rotate",
+			"def",
+			"rp",
+			"#",
+			"r",
+			"sides",
+			"process.env",
+			"$FRIEND",
+			"mail",
+			"friend ",
+			"use",
+			"drug",
+			"token",
+			"wit",
+			"//",
+			"search",
+			"redirec",
+			"redirect",
+			"friends",
+			"dd(",
+			"dddd(",
+			"dd",
+			"freidns",
+			"d",
+			"\t\t\t\t\t\tdd($friend->action);\n",
+			"dd\n",
+			"dd",
+			") ",
+			");})->",
+			"}\n",
+			"add",
+			"mymed",
+			"mymeds",
+			"');",
+			"myme",
+			"mymeds",
+			"NEW",
+			"TURN",
+			"switchTurn",
+			"hitCount",
+			"hit",
+			"HitCount",
+			"MISSED",
+			"socket.sh",
+			"newgame",
+			"hey",
+			"NEW",
+			"\t\t\t\n",
+			"shoot",
+			"AddUsertoGame",
+			"socket",
+			"welcome",
+			"shooterCount",
+			"socket.username",
+			"D",
+			"S",
+			"D",
+			"S",
+			"D",
+			"d",
+			"c",
+			"b",
+			"b1:'X',b2:'S',b3:'X',b4:'X',b5:'X',",
+			"a",
+			"selected",
+			"console.log",
+			"wit_",
+			"WIT",
+			"respondToUser",
+			"findOrCreateSession",
+			"CLIENT.",
+			"token",
+			"post",
+			"Facebook request body",
+			"token",
+			"works",
+			"it",
+			"subsc",
+			"super_",
+			"tab",
+			"params",
+			"token",
+			"noris",
+			"token",
+			"run",
+			"emit",
+			"conne",
+			"status",
+			"0",
+			"staty",
+			"status",
+			"server",
+			".on",
+			"reset",
+			"chat message",
+			"sendchat",
+			"name",
+			"msg",
+			"mag",
+			"id",
+			"type",
+			"meds",
+			"login\n",
+			"redirect\n",
+			"login\n",
+			"/login\n",
+			"\n",
+			"@include('meds.use_form')\n",
+			"Uses",
+			"addType",
+			"login",
+			"auth"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"hismed",
+			"hismeds",
+			"X",
+			"e",
+			"d",
+			"c",
+			"b1:'X',b2:'S',b3:'X',b4:'X',b5:'X',",
+			"b",
+			"Treatments",
+			"<a href=\"symps.php\">Treatments</a>",
+			"myMeds",
+			"=",
+			"href=",
+			"a href=",
+			"a href",
+			"a href src"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/modules/f.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1934,
+								1934
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Fabio/Fabio_20160920_1_Koch_SnowFlake.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 824,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								273,
+								273
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 21.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/fabio/Dropbox (SPH)/Fall 2016 Daily Codes/Maha Halawani/week 4/MahaHalawani_20160919_1_KochCurve.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								51,
+								1350
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "mathArt.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"welcome",
+				"meds/resources/views/welcome.blade.php"
+			],
+			[
+				"router",
+				"laravel/vendor/symfony/routing/Router.php"
+			],
+			[
+				"routes.",
+				"laravel/app/Http/routes.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 333.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
